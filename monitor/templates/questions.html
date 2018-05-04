@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+#header {
+    background-color:#484891;
+    color:white;
+    text-align:center;
+    padding:5px;
+}
+#nav {
+    line-height:30px;
+    background-color:#E0E0E0;
+    height:calc(100vh - 111px);
+    width:200px;
+    float:left;
+    padding:5px;	      
+}
+#section {
+    width:350px;
+    float:left;
+    padding:10px;	 	 
+}
+#footer {
+    background-color:#484891;
+    color:white;
+    clear:both;
+    text-align:center;
+    padding:6px;	 
+    position:fixed;
+    left:0;
+    bottom:0;
+    width: 100%;
+   height:20px;
+	 
+}
+</style>
+<title>疑难问题文章页面</title>
+</head>
+
+<body>
+<div id="header">
+<h1>疑难问题文章页面</h1>
+</div>
+
+{% block content %}
+{% for infor in infor_list %}
+<h2>Title：{{ infor.title }}</h2>
+<p>创建时间：{{ infor.timestamp}} </p> 
+<p>作者：{{ infor.author}} </p>  
+<p>{{ infor.body}} </p>  
+{% endfor %}
+{% endblock %}
+
+<div id="footer">
+Copyright fuweichao webssh page
+</div>
+</body>
+</html>
+

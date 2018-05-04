@@ -1,0 +1,66 @@
+{% load staticfiles %}
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>Register</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="keywords" content="Modern Responsive web template, Bootstrap Web Templates, Flat Web Templates, Andriod Compatible web template, 
+Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, SonyErricsson, Motorola web design" />
+<script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
+ <!-- Bootstrap Core CSS -->
+<link href="{% static "css/bootstrap.min.css" %}" rel='stylesheet' type='text/css' />
+<!-- Custom CSS -->
+<link href="{% static "css/style.css" %}" rel='stylesheet' type='text/css' />
+<link href="{% static "css/font-awesome.css" %}" rel="stylesheet"> 
+<!-- jQuery -->
+<script src="{% static "js/jquery.min.js" %}"></script>
+
+
+<!-- Bootstrap Core JavaScript -->
+<script src="{% static "js/bootstrap.min.js" %}"></script>
+</head>
+<body id="login">
+  <div class="login-logo">
+    <!--a href="index.html"><img src="{%static "images/logo.png"%}" alt=""/></a-->
+  </div>
+  <h2 class="form-heading"><font size="15" face="Cicle">Linux运维管理平台注册页面</font> </h2>
+  <form class="form-signin app-cam" action="/register/" method="post">
+  {% csrf_token %}
+       <p> 请输入您的想要注册的账号和密码</p>
+             <div class="form-group">
+            <label for="username">用户名</label>
+            {{ form.username }}  <span style="color: red">{{ form.username.errors }}</span>
+        </div>
+        <div class="form-group">
+            <label for="email">邮箱</label>
+            {{ form.email }}<span style="color: red">{{ form.email.errors }}</span>
+        </div>
+        <div class="form-group">
+            <label for="password">密码</label>
+            {{ form.pwd }}<span style="color: red">{{ form.pwd.errors.0 }}</span>
+        </div>
+        <div class="form-group">
+            <label for="confirm_password">确认密码</label>
+            {{ form.pwd_again }}
+            <span style="color: red">
+                {{ form.pwd_again.errors.0 }}
+				</span>
+                <span style="color: red">
+                {{ errors}}
+				</span>
+        </div>
+      </label>
+      <button class="btn btn-lg btn-success1 btn-block" type="submit">Submit</button>
+      <div class="registration">
+          Already Registered.
+          <a class="" href="/login/">
+              Login
+          </a>
+      </div>
+  </form>
+   <div class="copy_layout login register">
+      <p> Linux运维管理平台注册页面</p>
+   </div>
+</body>
+</html>

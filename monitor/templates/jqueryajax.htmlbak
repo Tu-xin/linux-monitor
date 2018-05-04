@@ -1,0 +1,48 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>echarts 画图 </title>
+<script src="{% static "js/echarts.min.js" %}"></script>
+<script src="{% static "js/jquery.min.js" %}"></script>
+</head>
+<body>
+    <h1>一副画</h1>
+    <hr>
+    <div id="container" style="width: 600px; height: 400px;"></div>
+    <script>
+    // 初始化 图表对象
+        var mychart = echarts.init(document.getElementById("container"));
+        // 进行相关项的设置，也就是所谓的搭搭骨架，方便待会的ajax异步的数据填充
+        var option = {
+            title : {
+                text : 'fwc love xxn'
+            },
+            tooltip : {
+                show : true
+            },
+            legend : {
+                data : [ 'age' ]
+            },
+            xAxis : [ {
+                data : ['fwc', 'xxn']
+            } ],
+            yAxis : [ {
+                type : 'value'
+            } ],
+            series : [ {
+                "name" : "age",
+                "type" : "bar",
+                "data" : ['20','25']
+            } ]
+        };
+        //mychart.showLoading(); // 显示加载动画
+        // 将配置项赋给chart对象，来显示相关的数据
+        mychart.setOption(option);
+	
+    </script>
+<marquee>我爱你谢晓楠</marquee>
+
+</body>
+</html>

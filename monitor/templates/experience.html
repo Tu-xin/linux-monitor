@@ -1,0 +1,62 @@
+{% load staticfiles %}
+<!DOCTYPE HTML>
+<html>
+<head>
+  <title>运维经验blog</title>
+  <meta name="description" content="website description" />
+  <meta name="keywords" content="website keywords, website keywords" />
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+  <link rel="stylesheet" type="text/css" href="{% static "css/blogstyle.css" %}" />
+  <script type="text/javascript" src="{% static "js/modernizr-1.5.min.js"%}"></script>
+</head>
+
+<body>
+  <div id="main">
+    <header>
+      <div id="logo">
+        <div id="logo_text">
+          <!-- class="logo_colour", allows you to change the colour of the text -->
+          <h1><a href="#">运维知识库</h1>
+          时间：{{ date }} 
+        </div>
+      </div>
+      <nav>
+        <div id="menu_container">
+        </div>
+      </nav>
+    </header>
+    <div id="site_content">
+      <div id="sidebar_container">
+        <div class="sidebar">
+          <h3>新闻</h3>
+          <h4>New Website Launched</h4>
+          <h5>January 1st, 2017</h5>
+          <p>2017 sees the redesign of our website. <a href="#">Read more</a></p>
+        </div>
+        <div class="sidebar">
+          <h3>友情链接</h3>
+          <ul>
+            <li><a href="{% url 'index' %}">首页</a></li>
+            <li><a target='_blank' href="https://www.baidu.com/">百度</a></li>
+            <li><a href="http://sg.search.yahoo.com/">yahoo</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="content">
+        {% for infor in infor_list %}
+        <h1>{{ infor.title }}</h1>
+        <p>创建时间：{{ infor.timestamp}}</p>
+        <p>作者：{{ infor.author}}</p>
+        <p>{{ infor.body}} </p>
+          {% endfor %}
+      </div>
+    </div>
+    <footer>
+      <p> linux 运维管理平台</p>
+    </footer>
+  </div>
+  <!-- javascript at the bottom for fast page loading -->
+  <script src="{% static "js/jquery.js" %}" ></script>
+
+</body>
+</html>

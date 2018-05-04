@@ -1,0 +1,57 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>echarts 画图 </title>
+<script src="{% static "js/echarts.js" %}"></script>
+<!--script src="{% static "js/jquery.min.js" %}"></script-->
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+</head>
+<body>
+    <h1>一副画</h1>
+    <hr>
+    <div id="container" style="width: 600px; height: 400px;"></div>
+    <script>
+    // 初始化 图表对象
+        var mychart = echarts.init(document.getElementById("container"));
+        // 进行相关项的设置，也就是所谓的搭搭骨架，方便待会的ajax异步的数据填充
+        mychart.setOption({
+            title: {
+                text: '异步数据加载示例'
+            },
+            tooltip: {},
+            legend: {
+                data:['蒸发量']
+            },
+            xAxis: {
+                data: []
+            },
+            yAxis: {},
+            series: [{
+                name: '蒸发量',
+                type: 'bar',
+                data: []
+            }]
+        });
+        mychart.showLoading(); // 显示加载动画
+        // 将配置项赋给chart对象，来显示相关的数据
+        $.get('/echart/').done(function (data) {
+            mychart.hideLoading(); // 隐藏加载动画
+            
+            // 填入数据
+    	    mychart.setOption({
+                xAxis: {
+                    data: data.month
+                },
+                series: [{
+                    data: data.zf 
+                }]
+            });
+        });	
+       
+    </script>
+<marquee>我爱你谢晓楠</marquee>
+
+</body>
+</html>

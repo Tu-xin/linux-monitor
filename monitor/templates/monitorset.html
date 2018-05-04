@@ -1,0 +1,71 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+<head>
+<title>监控报警设置页面</title>
+<link href="{%static "css/ansiblestyle.css"%}" rel='stylesheet' type='text/css' />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="keywords" content="Pink Contact Form ,Login Forms,Sign up Forms,Registration Forms,News latter Forms,Elements"./>
+<script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
+
+<!--webfonts-->
+<link href='http://fonts.useso.com/css?family=Lato:100,300,400,700,100italic,300italic,400italic|Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+<link href='http://fonts.useso.com/css?family=Raleway:400,200,300,500,600,800,700,900' rel='stylesheet' type='text/css'>
+<!--//webfonts-->
+</head>
+<body>
+	<h1>监控报警设置</h1>
+	<div class="login-01">
+			<form action="/monitorset/"  method="post"> {% csrf_token %}
+				<ul>
+				<li class="first">
+					<a href="#" class=" icon email"></a><input type="text" class="text" value="主机名" name="servername"  onFocus="this.value = '';" onBlur="if (this.value == '') {this.value = '主机名';}" >
+					<div class="clear"></div>
+				</li>
+                                <li class="first">
+                                        <a href="#" class=" icon email"></a><input type="text" class="text" value="监控项" name="item" onFocus="this.value = '';" onBlur="if (this.value == '') {this.value = '监控项';}" >
+                                        <div class="clear"></div>
+                                </li-->
+
+				<li class="first">
+					<a href="#" class=" icon email"></a><input type="text" class="text" value="报警阀值" name="value" onFocus="this.value = '';" onBlur="if (this.value == '') {this.value = '报警阀值';}" >
+					<div class="clear"></div>
+				</li-->
+				<li class="first">
+					<a href="#" class=" icon email"></a><input type="text" class="text" value="ip" name="serverip" onFocus="this.value = '';" onBlur="if (this.value == '') {this.value = 'ip';}" >
+					<div class="clear"></div>
+				</li>
+                                <!--li class="first">
+                                        <a href="#" class=" icon phone"></a><input type="text" class="text" value="{{ date }}" name="time" onFocus="this.value = '';" onBlur="if (this.value == '') {this.value = '修改时间';}" >
+                                        <div class="clear"></div>
+                                </li-->
+
+				<!--li class="second">
+				<a href="#" class=" icon msg"></a><textarea value="Message" onFocus="this.value = '';" onBlur="if (this.value == '') {this.value = 'Comments';}">{{ output}}/textarea>
+				<div class="clear"></div>
+				</li-->
+			</ul>
+			<input type="submit" onClick="myFunction()" value="Submit" >
+			<div class="clear"></div>
+		</form>
+   </div>   
+   <!--div class="login-01">
+         <form>
+		     <li class="second">
+				<a href="#" class=" icon phone"></a><textarea value="Message" onFocus="this.value = '';" onBlur="if (this.value == '') {this.value = '命令输出结果';}">{{ output }}</textarea>
+				<div class="clear"></div>
+		     </li>
+		 </form>
+	</div-->
+
+                       
+	<!--start-copyright-->
+   		<div class="copy-right">
+   			<div class="wrap">
+				<p>Copyright &copy; 付炜超的linux运维管理平台</p>
+     		</div>
+	    </div>
+	<!--//end-copyright-->
+</body>
+</html>

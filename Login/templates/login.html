@@ -1,0 +1,56 @@
+{% load staticfiles %}
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>Login</title>	
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="keywords" content="Modern Responsive web template, Bootstrap Web Templates, Flat Web Templates, Andriod Compatible web template, 
+Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, SonyErricsson, Motorola web design" />
+<script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
+ <!-- Bootstrap Core CSS -->
+<link href="{% static "css/bootstrap.min.css"%}" rel='stylesheet' type='text/css' />
+<!-- Custom CSS -->
+<link href="{% static "css/style.css" %}" rel='stylesheet' type='text/css' />
+<link href="(% static "css/font-awesome.css" %}" rel="stylesheet"> 
+<!-- jQuery -->
+<script src="{% static "js/jquery.min.js" %}"></script>
+<link href='http://fonts.useso.com/css?family=Roboto:400,100,300,500,700,900' rel='stylesheet' type='text/css'> 
+
+<script src="{% static "js/bootstrap.min.js" %}"></script>
+</head>
+<body id="login">
+  <div class="login-logo">
+    <!--a href="index.html">linux 运维管理平台<!--img src="{% static "images/logo.png" %}" alt=""/--></a-->
+  </div>
+  <h2 class="form-heading"><font size="15" face="Cicle">Linux运维管理平台登录页面</font></h2>
+  <div class="app-cam">
+	  <form action="/login/"  method="post"> 
+	  {% csrf_token %}
+		<label for="username">用户名</label>
+             {{ form.username }} <span style="color: red">{{ form.username.errors }}</span>
+             <label for="username">密码</label>
+             {{ form.pwd }} <span style="color: red">{{ form.username.errors }}</span>
+             <span style="color: red">
+				{{form.obj}}
+            </span>
+		<div class="submit"><input type="submit" onclick="myFunction()" value="登录"></div>
+		<div class="login-social-link">
+          <a href="/login/" class="facebook">
+             登录取消
+          </a>
+          <a href="/register/" class="twitter">
+              用户注册
+          </a>
+        </div>
+		<ul class="new">
+			<li class="new_left"><p><a href="#">忘记密码</a></p></li>
+			<div class="clearfix"></div>
+		</ul>
+	</form>
+  </div>
+   <div class="copy_layout login">
+      <p>Linux运维管理系统登录界面 </p>
+   </div>
+</body>
+</html>

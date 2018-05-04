@@ -1,0 +1,60 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+<head>    
+    <meta charset="utf-8">    
+    <title>Charts demo</title>  
+    <script src="{% static "js/echarts.js" %}"></script>
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+  
+</head>    
+<body>    
+  
+    <div id="main" style="height:400px;"></div>   
+    <script type="text/javascript">    
+  
+                var myChart = echarts.init(document.getElementById('main'));  
+                var option = {  
+                    tooltip: {  
+                        show: true  
+                    },  
+                    legend: {  
+                        data:['不同进度状态的项目数']  
+                    },  
+                    xAxis : [  
+                        {  
+                            type : 'category',  
+                            data : ["项目新建","项目关闭","风控议款待商议","异议价格待商议","资料待提交","资料待商议","特批意见待商议"]  
+                        }  
+                    ],  
+                    yAxis : [  
+                        {  
+                            type : 'value'  
+                        }  
+                    ],  
+                    series : [  
+                        {  
+                            "name":"销量",  
+                            "type":"bar",  
+                            "data": []  
+                        }  
+                    ]  
+                };  
+                  
+                $.ajax({   
+                    url: '/echart/',   
+                    type:'POST',
+	            dataType : 'json', 
+                    success: function(data2){  
+                    if(data2){  
+                        option.series[0].data = data2.zf;  
+                        myChart.setOption(option);                     
+                    }  
+                }  
+        });  
+  
+          
+    </script>    
+  
+</body>
+</html>    

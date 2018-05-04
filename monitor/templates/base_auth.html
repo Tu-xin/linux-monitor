@@ -1,0 +1,32 @@
+{% load i18n %}{% load staticfiles %}<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="{% static "img/favicon.ico" %}">
+    <title>{% block title %}PyDash - Authentication{% endblock %}</title>
+    <link href="{% static "css/bootstrap.min1.css" %}" rel="stylesheet">
+    <link href="{% static "css/style1.css" %}" rel="stylesheet">
+    <link href="{% static "css/dashboard1.css" %}" rel="stylesheet">
+    <link href="{% static "css/signin1.css" %}" rel="stylesheet">
+    <link href="{% static "css/fonts1.css" %}" rel="stylesheet">
+    <link href="{% static "css/font-awesome1.css" %}" rel="stylesheet">    
+    <link href="{% static "css/bootstrap-responsive1.min.css" %}" rel="stylesheet">
+</head>
+<body>
+<!-- Static navbar -->
+<div class="navbar navbar-fixed-top">
+    <div class="navbar-inner">
+	<div class="container">
+            <a class="brand" href="/">Dashboard</a>
+        </div>
+    </div>
+</div>
+<div class="container">
+    {% block content1 %}{% endblock %}
+</div>
+<script src="{% static "js/jquery.js" %}"></script>
+<script src="{% static "js/bootstrap.min1.js" %}"></script>
+</body>
+</html>
+

@@ -1,0 +1,135 @@
+﻿{% load staticfiles %}
+<!DOCTYPE html>
+<!--[if lt IE 7 ]><html class="ie ie6" lang="en"> <![endif]-->
+<!--[if IE 7 ]><html class="ie ie7" lang="en"> <![endif]-->
+<!--[if IE 8 ]><html class="ie ie8" lang="en"> <![endif]-->
+<!--[if (gte IE 9)|!(IE)]><!--><html lang="en"> <!--<![endif]-->
+<head>
+
+    <!-- Basic Page Needs
+  ================================================== -->
+	<meta charset="utf-8">
+	<title>服务器监控图示页面</title>
+	<meta name="description" content="服务器监控图示页面">
+	<meta name="author" content="付炜超">
+	
+    <!-- Mobile Specific Metas
+  ================================================== -->
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <!-- CSS
+  ================================================== -->
+	<link rel="stylesheet" href="{% static "css/zerogrid.css" %}">
+	<link rel="stylesheet" href="{% static "css/monitorstyle.css" %}">
+    <link rel="stylesheet" href="{% static "css/responsive.css" %}">
+	
+		<script src="{% static "js/html5.js" %}"></script>
+	
+	<link href="{% static "images/favicon.ico" %}" rel='icon' type='image/x-icon'/>
+    
+</head>
+<body>
+<!--------------Header--------------->
+<header>
+	<div id="logo"><a href=""><img src="{% static "images/monitorlogo.png" %}"/></a></div>
+</header>
+
+<!--------------Navigation--------------->
+			
+<!--------------Content--------------->
+<section id="content">
+	<div class="zerogrid">
+		<div class="row block">
+			<div class="main-content">
+				<article class="col-1-3">
+					<div class="wrap">
+						<div class="heading">
+							<img src="{% static "jpg/monitor/cpu1.jpg" %}"/>   
+							<h2><a href="#">cpu 1 分钟的性能图</a></h2>
+						</div>
+						
+					</div>
+				</article>
+				<article class="col-1-3">
+					<div class="wrap">
+						<div class="heading">
+							<img src="{% static "jpg/monitor/cpu3.jpg" %}"/>
+							<h2><a href="#">cpu 3 分钟的性能图</a></h2>
+						</div>
+						
+					</div>
+				</article>
+				<article class="col-1-3">
+					<div class="wrap">
+						<div class="heading">
+							<img src="{% static "jpg/monitor/cpu5.jpg" %}"/>
+							<h2><a href="#">cpu 5 分钟的性能图</a></h2>
+						</div>
+						
+					</div>
+				</article>
+				<article class="col-1-3">
+					<div class="wrap">
+						<div class="heading">
+							<img src="{% static "jpg/monitor/memory1.jpg" %}"/>
+							<h2><a href="#">内存 1 分钟的使用图</a></h2>
+						</div>
+						
+					</div>
+				</article>
+				<article class="col-1-3">
+					<div class="wrap">
+						<div class="heading">
+							<img src="{% static "jpg/monitor/memory3.jpg" %}"/>
+							<h2><a href="#">内存 3 分钟的使用图</a></h2>
+						</div>
+						
+					</div>
+				</article>
+				<article class="col-1-3">
+					<div class="wrap">
+						<div class="heading">
+							<img src="{% static "jpg/monitor/memory5.jpg" %}"/>
+							<h2><a href="#">内存 5 分钟的使用图</a></h2>
+						</div>
+						
+					</div>
+				</article>
+				<article class="col-1-3">
+					<div class="wrap">
+						<div class="heading">
+							<img src="{% static "jpg/monitor/disk1.jpg" %}"/>
+							<h2><a href="#">磁盘 1 分钟的空闲量</a></h2>
+						</div>
+						
+					</div>
+				</article>
+				<article class="col-1-3">
+					<div class="wrap">
+						<div class="heading">
+							<img src="{% static "jpg/monitor/disk3.jpg" %}"/>
+							<h2><a href="#">磁盘 3 分钟的空闲量</a></h2>
+						</div>
+						
+					</div>
+				</article>
+				<article class="col-1-3">
+					<div class="wrap">
+						<div class="heading">
+							<img src="{% static "jpg/monitor/disk5.jpg" %}"/>
+							<h2><a href="#">磁盘 5 分钟的空闲量</a></h2>
+						</div>
+						
+					</div>
+				</article>
+			</div>
+			
+		</div>
+	</div>
+</section>
+<!--------------Footer--------------->
+<footer>
+	<p>Copyright 付炜超的linux运维管理平台</p>
+</footer>
+
+</body></html>

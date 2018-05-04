@@ -1,0 +1,788 @@
+ '{% load staticfiles %}'<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+ <!-- Bootstrap Core CSS -->
+    <link href="{% static "css/bootstrap.min.css" %}" rel='stylesheet' type='text/css' />
+<!-- Custom CSS -->
+    <link href="{% static "css/style.css" %}" rel='stylesheet' type='text/css' />
+<!-- Graph CSS -->
+    <link href="{% static  "css/lines.css" %}"  rel='stylesheet' type='text/css' />
+    <link href="{% static "css/font-awesome.css" %}" rel="stylesheet"> 
+    <link href="{% static "css/custom.css"%}" rel="stylesheet">
+    <title>{% block title %}监控 {% endblock %}</title>
+    <link href="{% static "css/bootstrap.min1.css" %}" rel="stylesheet">
+    <link href="{% static "css/bootstrap-responsive1.min.css" %}" rel="stylesheet">
+    <link href="{% static "css/fonts1.css" %}" rel="stylesheet">
+    <link href="{% static "css/font-awesome1.css" %}" rel="stylesheet">
+    <link href="{% static "css/style1.css" %}" rel="stylesheet">
+    <link href="{% static "css/dashboard1.css" %}" rel="stylesheet">
+</head>
+<body>
+
+
+<div id="wrapper">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Liinx运维管理平台</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="index.html">linux运维管理平台</a>
+            </div>
+            </div>
+    <div >
+        <div id="get_cpu" style="width: 600px; height: 400px;"></div>
+        </div>     
+    <div >
+        <div id="get_cpu_load" style="width: 1000px; height: 400px;"></div>
+        </div>     
+    <div >
+        <div id="get_cpu_mem" style="width: 1000px; height: 400px;"></div>
+        </div>  
+    <div >
+        <div id="get_cpu_net" style="width: 1000px; height: 400px;"></div>
+        </div>     
+    <div >
+        <div id="get_disk_io" style="width: 1000px; height: 400px;"></div>
+        </div>          
+    <div class="widget widget-table action-table">
+            <div class="widget-header"> <i class="fa fa-hdd-o"></i>
+              <h3>Disk Usage</h3><i class="fa fa-minus"></i>
+              <div id="refresh-df">
+              </div>
+            </div>
+            <!-- /widget-header -->
+            <div class="widget-content">
+        <table id="get_disk" class="table table-hover table-condensed table-bordered" >
+        </table>
+            </div>
+            <!-- /widget-content -->
+          </div>
+          <!-- /widget -->
+              
+    
+
+<script src="{% static "js/jquery.js" %}"></script>
+<script src="{% static "js/bootstrap.js" %}"></script>
+<script src="{% static "js/base.js" %}"></script>
+<script src="{% static "js/Chart.min.js" %}"></script>
+<script src="{% static "js/jquery.dataTables.min.js" %}"></script>
+<script src="{% static "js/dashboard.js" %}"></script>
+<script src="{% static "js/echarts.js" %}"></script>
+<!--[if lte IE 8]>
+    <script src="{% static "js/excanvas.js" %}"></script>
+<![endif]-->
+<script type="text/javascript">
+dashboard.getDisk = function () {
+    $.ajax({   
+            url: '/ajax/getdisk/',   
+            type: 'POST',
+            data: {'ip':"1.2.2.3"},
+	        dataType : 'json', 
+            success: function(data){ 
+        destroy_dataTable("get_disk");
+        var $filterPs = $("#filter-ps");
+        $filterPs.val("").off("keyup");
+        var psTable = $("#get_disk").dataTable({
+            aaData: JSON.parse(data.disk),
+            aoColumns: [
+                { sTitle: "FILESYSTEM" },
+                { sTitle: "SIZE" },
+                { sTitle: "USED" },
+                { sTitle: "AVAIL" },
+                { sTitle: "USE %" },
+                { sTitle: "MOUNTED" }
+            ],
+            bPaginate: false,
+            bFilter: true,
+            sDom: "lrtip",
+            bAutoWidth: false,
+            bInfo: false
+        }).fadeIn();
+        $filterPs.on("keyup", function () {
+            psTable.fnFilter(this.value);
+        });
+       
+    }
+});
+}
+dashboard.getCpu_load = function () {
+  var myChart = echarts.init(document.getElementById('get_cpu_load'));
+    var data = [];
+    var time = [];
+    function addData(){
+        $.ajax({
+            type: 'POST',
+            url: '/ajax/getcpu_load/',//请求数据的地址
+            dataType: "json",        //返回数据形式为json
+            success: function (result) {
+            //请求成功时执行该函数内容，result即为服务器返回的json对象
+            //result = JSON.parse(result)
+            //console.log(result);
+            if (result){
+                //console.log('inif')
+                    time.push(result.datatime);
+                    data.push(result.load)
+
+                }
+            },
+            error: function (errorMsg) {
+            //请求失败时执行该函数
+                alert("图表请求数据失败!");
+                myChart.hideLoading();
+        }
+     });
+     return {
+        time:time.toString(),
+        data:data
+     }
+    }
+    var options = {
+        tooltip: {
+        trigger: 'axis',
+        position: function (pt) {
+            return [pt[0], '10%'];
+        }
+    },
+        title: {
+                text: 'CPU_load_avg',
+                x:'center'
+            },
+        xAxis:{
+                type: 'category',
+                data: time,
+                boundaryGap:false,
+
+                },
+        yAxis:{ 
+            type:'value',
+            boundaryGap: [0, '100%'],
+            splitLine: {
+                show: false
+            }
+        },
+        dataZoom: [
+                 {
+                     type: 'slider',    //支持鼠标滚轮缩放
+                     start: 0,            //默认数据初始缩放范围为10%到90%
+                     end: 100
+                 },
+                 {
+                     type: 'inside',    //支持单独的滑动条缩放
+                     start: 0,            //默认数据初始缩放范围为10%到90%
+                     end: 100
+                 }
+            ],    
+        toolbox: {
+            left: 'right',
+            feature: {
+                dataZoom: {
+                yAxisIndex: 'none'
+                },
+            restore: {},
+            saveAsImage: {}
+            }
+        },
+
+        series: [
+            {
+            name:'CPU_LOAD_AVG',
+            type:'line',
+            smooth:false,
+            symbol: 'none',
+            stack: 'a',
+            data: data
+            }
+    ]
+        };
+            // 为echarts对象加载数据 
+    myChart.setOption(options);
+    myChart.showLoading(); 
+    setInterval(function () {
+    if (data.length > 10){
+        data.shift();
+        time.shift();
+        
+    }
+        //data.shift();
+        addData();
+        myChart.hideLoading();
+        myChart.setOption({
+        xAxis: {
+            data:time
+        },
+        series: [{
+            data: data
+        }]
+    });
+}, 1000);   
+                      
+}
+dashboard.getMem = function(){
+var myChart = echarts.init(document.getElementById('get_cpu_mem'));
+    var data_total_mem = [];
+    var data_used_mem = [];
+    var data_total_swap = [];
+    var data_used_swap = [];
+    var percent = [];
+    var time = [];
+    var data = [];
+    function addData(){
+        $.ajax({
+            type: 'POST',
+            url: '/ajax/getmem/',//请求数据的地址
+            dataType: "json",        //返回数据形式为json
+            success: function (result) {
+            //请求成功时执行该函数内容，result即为服务器返回的json对象
+            //result = JSON.parse(result)
+            //console.log(result);
+            if (result){
+                //console.log('inif')
+                    time.push(result.datatime);
+                    data_total_mem.push(result.mem_total);
+                    data_used_mem.push(result.mem_used);
+                    data_total_swap.push(result.swap_total);
+                    data_used_swap.push(result.swap_used);
+                    percent.push(result.percent)
+                }
+            },
+            error: function (errorMsg) {
+            //请求失败时执行该函数
+                alert("图表请求数据失败!");
+                myChart.hideLoading();
+        }
+     });
+     return {
+        time:time.toString(),
+        data_total_mem:data_total_mem,
+        data_used_mem:data_used_mem,
+        data_total_swap:data_total_swap,
+        data_used_swap:data_used_swap,
+        percent:percent
+     }
+    }
+    var options = {
+        tooltip: {
+        trigger: 'axis',
+        position: function (pt) {
+            return [pt[0], '10%'];
+        }
+    },
+        legend:{
+            top:0,
+            data: ['mem_total','mem_used','swap_total','swap_used','mem_used_percent']
+        },
+        title: {
+                text: '内存使用情况',
+                top:10,
+                x:'center'
+            },
+        xAxis:{
+                type: 'category',
+                data: time,
+                name:'时间',
+                boundaryGap:false,
+                splitLine: {
+                    show: false
+                    }
+                },
+        yAxis:[{ 
+            name: '内存',
+            type: 'value',
+            boundaryGap: [0, '100%'],
+            axisLabel : {
+                formatter: '{value}MB'    //控制输出格式
+                             },
+            splitLine: {
+                show: false
+            }},{
+            name: '使用率',
+            type: 'value',
+            axisLabel : {
+                formatter: '{value} %'    //控制输出格式
+                             },
+            boundaryGap: [0, '100%'],
+            splitLine: {
+                show: false
+            }
+        }],
+         dataZoom: [
+                 {
+                     type: 'slider',    //支持鼠标滚轮缩放
+                     start: 0,            //默认数据初始缩放范围为10%到90%
+                     end: 100
+                 },
+                 {
+                     type: 'inside',    //支持单独的滑动条缩放
+                     start: 0,            //默认数据初始缩放范围为10%到90%
+                     end: 100
+                 }
+            ],
+        toolbox: {
+            left: 'right',
+            feature: {
+                dataZoom: {
+                yAxisIndex: 'none'
+                },
+            restore: {},
+            saveAsImage: {}
+            }
+        },
+
+        series: [
+            {
+            name:'mem_total',
+            type:'line',
+            smooth:false,
+            areaStyle: {normal: {}},
+            symbol: 'none',
+            data1: data_total_mem
+            },  {
+            name:'mem_used',
+            type:'line',
+            smooth:false,
+            areaStyle: {normal: {}},
+            symbol: 'none',
+            data2: data_used_mem
+            },  {
+            name:'swap_total',
+            type:'line',
+            smooth:false,
+            areaStyle: {normal: {}},
+            symbol: 'none',
+            data3: data_total_swap,
+            },  {
+            name:'swap_used',
+            type:'line',
+            smooth:false,
+            areaStyle: {normal: {}},
+            symbol: 'none',
+            data4: data_used_swap
+            },  {
+            name:'mem_used_percent',
+            yAxisIndex: 1,
+            type:'line',
+            smooth:false,
+            symbol: 'none',
+            data: percent
+            }
+    ]
+        };
+            // 为echarts对象加载数据 
+    myChart.setOption(options);
+    myChart.showLoading(); 
+    setInterval(function () {
+    if (time.length > 10){
+        time.shift();
+        data_total_mem.shift();
+        data_total_swap.shift();
+        data_used_mem.shift();
+        data_used_swap.shift();
+        percent.shift()
+    }
+        //data.shift();
+        addData();
+   
+
+        myChart.hideLoading();
+        myChart.setOption({
+        xAxis: {
+            data:time
+        },
+        series: [{
+            name: 'mem_total',
+            data: data_total_mem
+            },{
+            name: 'mem_used',
+            data: data_used_mem
+            },{
+            name: 'swap_total',
+            data: data_total_swap,},
+            {
+            name: 'swap_used',
+            data: data_used_swap,},
+            {
+            name: 'mem_used_percent',
+            data: percent
+        }]
+    });
+}, 2000);   
+}
+dashboard.getCpu = function () {
+    var myChart = echarts.init(document.getElementById('get_cpu'));
+     myChart.setOption({
+        color: ['#ff7d27', '#47b73d'],//饼图颜色
+        title: {
+            text: 'Cpu使用情况',
+            subtext: '整合数据',
+            x:'center'
+        },
+        tooltip: {
+            trigger: 'item',
+            formatter: "{a} <br/>{b} : {c} ({d}%)"
+        },        
+        legend: {
+            orient: 'vertical',
+            x: 'left',
+            data: []
+        },        
+        toolbox: {
+            show: true,
+            feature: {
+                mark: { show: true },
+                dataView: { show: true, readOnly: false },
+                magicType: {
+                    show: true,
+                    type: ['pie', 'funnel'],
+                    option: {
+                        funnel: {
+                            x: '25%',
+                            width: '50%',
+                            funnelAlign: 'left',
+                            max: 1548
+                        }
+                    }
+                },
+                restore: { show: true },
+                saveAsImage: { show: true }
+            }
+        },         
+        series: [{
+            name: 'Cpu使用情况',
+            type: 'pie',
+            radius: '55%',
+            center: ['50%', '60%'],            
+            data: []
+        }]        
+    });
+    myChart.showLoading(); 
+    var names = [];    //类别数组（用于存放饼图的类别）
+    var brower = [];
+    $.ajax({
+        type: 'POST',
+        url: '/ajax/getcpu/',//请求数据的地址
+        dataType: "json",        //返回数据形式为json
+        success: function (result) {
+            //请求成功时执行该函数内容，result即为服务器返回的json对象
+           //data = JSON.parse(result)
+            $.each(result.list, function (index, item) {
+                names.push(item.type);    //挨个取出类别并填入类别数组 
+                brower.push({
+                    name: item.type,
+                    value: item.value
+                });
+            });
+            myChart.hideLoading();    //隐藏加载动画
+            myChart.setOption({        //加载数据图表                
+                legend: {                    
+                    data: names
+                },
+                series: [{                    
+                    data: brower
+                }]
+            });
+        },
+        error: function (errorMsg) {
+            //请求失败时执行该函数
+            alert("图表请求数据失败!");
+            myChart.hideLoading();
+        }
+    });
+
+}
+dashboard.getNet = function(){
+var myChart = echarts.init(document.getElementById('get_cpu_net'));
+    var time = [];
+    var net_iface = [];
+    var traffic_in = [];
+    var traffic_out = [];
+    function addData(){
+        $.ajax({
+            type: 'POST',
+            url: '/ajax/getnet/',//请求数据的地址
+            dataType: "json",        //返回数据形式为json
+            success: function (result) {
+            //请求成功时执行该函数内容，result即为服务器返回的json对象
+            //result = JSON.parse(result)
+            //console.log(result);
+            if (result){
+                //console.log('inif')
+                    time.push(result.datatime);
+                    net_iface.push(result.interface+"traffic_in");
+                    net_iface.push(result.interface+"traffic_out");
+                    traffic_in.push(result.traffic_in);
+                    traffic_out.push(result.traffic_out);
+                }
+            },
+            error: function (errorMsg) {
+            //请求失败时执行该函数
+                alert("图表请求数据失败!");
+                myChart.hideLoading();
+        }
+     });
+     return {
+        time: time.toString(),
+        net_iface: net_iface,
+        traffic_in: traffic_in,
+        traffic_out: traffic_out
+     }
+    }
+    var options = {
+        tooltip: {
+        trigger: 'axis',
+        position: function (pt) {
+            return [pt[0], '10%'];
+        }
+    },
+        legend:{
+            data: ['eth0_traffic_in','eth0_traffic_out']
+        },
+        title: {
+                text: '网络流量显示',
+                x:'left'
+            },
+        xAxis:{
+                type: 'category',
+                data: [],
+                name:'时间',
+                boundaryGap:false,
+                splitLine: {
+                    show: false
+                    }
+                },
+        yAxis:[{ 
+            name: '流量',
+            type: 'value',
+            boundaryGap: [0, '100%'],
+            axisLabel : {
+                formatter: '{value}KB'    //控制输出格式
+                             },
+            splitLine: {
+                show: false
+            }
+            }],
+         dataZoom: [
+                 {
+                     type: 'slider',    //支持鼠标滚轮缩放
+                     start: 0,            //默认数据初始缩放范围为10%到90%
+                     end: 100
+                 },
+                 {
+                     type: 'inside',    //支持单独的滑动条缩放
+                     start: 0,            //默认数据初始缩放范围为10%到90%
+                     end: 100
+                 }
+            ],
+        toolbox: {
+            left: 'right',
+            feature: {
+                dataZoom: {
+                yAxisIndex: 'none'
+                },
+            restore: {},
+            saveAsImage: {}
+            }
+        },
+
+        series: [
+        {
+            name:'eth0_traffic_in',
+            type:'line',
+            smooth:false,
+            symbol: 'none',
+            data: []
+            },  {
+            name:'eth0_traffic_out',
+            type:'line',
+            smooth:false,
+            symbol: 'none',
+            data: []
+            }
+    ]
+        };
+            // 为echarts对象加载数据 
+    myChart.setOption(options);
+    myChart.showLoading(); 
+    setInterval(function () {
+    if (time.length > 60){
+        time.shift();
+        traffic_in.shift();
+        traffic_out.shift();
+    }
+        //data.shift();
+        addData();
+   
+
+        myChart.hideLoading();
+        myChart.setOption({
+        xAxis: {
+            data:time
+        },
+        series: [{
+            name: 'eth0_traffic_in',
+            data: traffic_in
+            },{
+            name: 'eth0_traffic_out',
+            data: traffic_out
+            }]
+    });
+}, 2000);   
+}
+dashboard.getDisk_io = function(){
+var myChart = echarts.init(document.getElementById('get_disk_io'));
+    var time = [];
+    var disk_dev = [];
+    var r_io = [];
+    var w_io = [];
+    function addData(){
+        $.ajax({
+            type: 'POST',
+            url: '/ajax/getdisk_io/',//请求数据的地址
+            dataType: "json",        //返回数据形式为json
+            success: function (result) {
+            //请求成功时执行该函数内容，result即为服务器返回的json对象
+            //result = JSON.parse(result)
+            //console.log(result);
+            if (result){
+                //console.log('inif')
+                    time.push(result.datatime);
+                    r_io.push(result.r_io);
+                    w_io.push(result.w_io);
+                    disk_dev.push(result.dev)
+                }
+            },
+            error: function (errorMsg) {
+            //请求失败时执行该函数
+                alert("图表请求数据失败!");
+                myChart.hideLoading();
+        }
+     });
+     return {
+        time: time.toString(),
+        disk_dev: disk_dev,
+        r_io: r_io,
+        w_io: w_io
+     }
+    }
+    var options = {
+        tooltip: {
+        trigger: 'axis',
+        position: function (pt) {
+            return [pt[0], '10%'];
+        }
+    },
+        legend:{
+            data: ['r_io','w_io']
+        },
+        title: {
+                text: '磁盘IO显示',
+                x:'left'
+            },
+        xAxis:{
+                type: 'category',
+                data: [],
+                name:'时间',
+                boundaryGap:false,
+                splitLine: {
+                    show: false
+                    }
+                },
+        yAxis:[{ 
+            name: '毫秒',
+            type: 'value',
+            boundaryGap: [0, '100%'],
+            axisLabel : {
+                formatter: '{value}ms'    //控制输出格式
+                             },
+            splitLine: {
+                show: false
+            }
+            }],
+         dataZoom: [
+                 {
+                     type: 'slider',    //支持鼠标滚轮缩放
+                     start: 0,            //默认数据初始缩放范围为10%到90%
+                     end: 100
+                 },
+                 {
+                     type: 'inside',    //支持单独的滑动条缩放
+                     start: 0,            //默认数据初始缩放范围为10%到90%
+                     end: 100
+                 }
+            ],
+        toolbox: {
+            left: 'right',
+            feature: {
+                dataZoom: {
+                yAxisIndex: 'none'
+                },
+            restore: {},
+            saveAsImage: {}
+            }
+        },
+
+        series: [
+        {
+            name:'r_io',
+            type:'line',
+            smooth:false,
+            symbol: 'none',
+            data: []
+            },  {
+            name:'w_io',
+            type:'line',
+            smooth:false,
+            symbol: 'none',
+            data: []
+            }
+    ]
+        };
+            // 为echarts对象加载数据 
+    myChart.setOption(options);
+    myChart.showLoading(); 
+    setInterval(function () {
+    if (time.length > 60){
+        time.shift();
+        r_io.shift();
+        w_io.shift();
+    }
+        //data.shift();
+        addData();
+   
+
+        myChart.hideLoading();
+        myChart.setOption({
+        xAxis: {
+            data:time
+        },
+        series: [{
+            name: 'r_io',
+            data: r_io
+            },{
+            name: 'w_io',
+            data: w_io
+            }]
+    });
+}, 2000);   
+}
+$(function() {
+            window.setInterval('dashboard.getCpu()', 1000*60);
+            window.setInterval('dashboard.getDisk()', 1000*60*60);
+        });
+$(document).ready(function (){
+    dashboard.getDisk();
+    dashboard.getCpu();
+    dashboard.getCpu_load();
+    dashboard.getMem();
+    dashboard.getNet();
+    dashboard.getDisk_io()
+});
+</script>
+</body>
+</html>
